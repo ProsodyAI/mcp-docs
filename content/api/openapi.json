@@ -1,0 +1,2717 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "ProsodyAI API",
+    "description": "\n    Prosody-driven KPI prediction API powered by State Space Models.\n\n    ## How It Works\n\n    1. **Define KPIs** on the ProsodyAI dashboard (what you care about)\n    2. **Send audio** to this API\n    3. **Get predictions** for your KPIs based on raw prosodic signals\n    4. **Report outcomes** to close the feedback loop and improve predictions\n\n    ## Features\n\n    - **Prosody Analysis**: Extract pitch, energy, rhythm, voice quality features\n    - **KPI Prediction**: Predict outcomes for your custom KPIs\n    - **Real-time Streaming**: WebSocket-based prosodic feedback for voice agents\n    - **Actionable Recommendations**: What to change to improve KPI outcomes\n\n    ## Authentication\n\n    All endpoints require an API key passed via the `X-API-Key` header.\n    Manage API keys on the ProsodyAI dashboard.\n    ",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Health Check",
+        "description": "Health check endpoint.\n\nReturns service status and version information.",
+        "operationId": "health_check_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Root",
+        "description": "Root endpoint with API information.",
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/analyze/audio": {
+      "post": {
+        "tags": [
+          "Analysis"
+        ],
+        "summary": "Analyze audio file",
+        "description": "Upload audio for prosody analysis and KPI outcome prediction.",
+        "operationId": "analyze_audio_file_v1_analyze_audio_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_analyze_audio_file_v1_analyze_audio_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalysisResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/analyze/base64": {
+      "post": {
+        "tags": [
+          "Analysis"
+        ],
+        "summary": "Analyze base64-encoded audio",
+        "description": "Submit base64-encoded audio for prosody analysis and KPI prediction.",
+        "operationId": "analyze_base64_audio_v1_analyze_base64_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnalysisRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalysisResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/analyze/url": {
+      "post": {
+        "tags": [
+          "Analysis"
+        ],
+        "summary": "Analyze audio from URL",
+        "description": "Fetch and analyze audio from a URL.",
+        "operationId": "analyze_audio_url_v1_analyze_url_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnalysisRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalysisResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/analyze/gcs": {
+      "post": {
+        "tags": [
+          "Analysis"
+        ],
+        "summary": "Analyze audio from GCS",
+        "description": "Analyze audio directly from Google Cloud Storage.",
+        "operationId": "analyze_gcs_audio_v1_analyze_gcs_post",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_analyze_gcs_audio_v1_analyze_gcs_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalysisResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/features/prosody": {
+      "post": {
+        "tags": [
+          "Features"
+        ],
+        "summary": "Extract prosody features",
+        "description": "Extract prosodic features from audio without emotion classification.",
+        "operationId": "extract_prosody_features_v1_features_prosody_post",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_extract_prosody_features_v1_features_prosody_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProsodyFeaturesResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/features/phonetic": {
+      "post": {
+        "tags": [
+          "Features"
+        ],
+        "summary": "Extract phonetic features",
+        "description": "Extract phonetic features from text.",
+        "operationId": "extract_phonetic_features_v1_features_phonetic_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TextInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PhoneticFeaturesResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/stream/health": {
+      "get": {
+        "tags": [
+          "Streaming"
+        ],
+        "summary": "Streaming Health",
+        "operationId": "streaming_health_v1_stream_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/stream/sessions": {
+      "get": {
+        "tags": [
+          "Streaming"
+        ],
+        "summary": "List Active Sessions",
+        "operationId": "list_active_sessions_v1_stream_sessions_get",
+        "parameters": [
+          {
+            "name": "org_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Org Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/stream/history/{org_slug}": {
+      "get": {
+        "tags": [
+          "Streaming"
+        ],
+        "summary": "List Session History",
+        "operationId": "list_session_history_v1_stream_history__org_slug__get",
+        "parameters": [
+          {
+            "name": "org_slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Org Slug"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/stream/history/{org_slug}/{session_id}": {
+      "get": {
+        "tags": [
+          "Streaming"
+        ],
+        "summary": "Get Session Transcript",
+        "operationId": "get_session_transcript_v1_stream_history__org_slug___session_id__get",
+        "parameters": [
+          {
+            "name": "org_slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Org Slug"
+            }
+          },
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/feedback/correction": {
+      "post": {
+        "tags": [
+          "Feedback"
+        ],
+        "summary": "Submit prosody correction",
+        "description": "Human corrects a prosody prediction (VAD values). High-quality training signal.",
+        "operationId": "submit_correction_v1_feedback_correction_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackCorrectionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/feedback/session_outcome": {
+      "post": {
+        "tags": [
+          "Feedback"
+        ],
+        "summary": "Submit KPI outcomes for a conversation",
+        "description": "Report actual KPI values after a conversation ends. This is the primary training signal for outcome prediction.",
+        "operationId": "submit_session_outcome_v1_feedback_session_outcome_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SessionOutcomeRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/admin/tenants/{organization_id}/api-keys": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Create API key for organization",
+        "description": "Create a new API key for the tenant. The raw key is returned only in this response.",
+        "operationId": "create_api_key_v1_admin_tenants__organization_id__api_keys_post",
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Organization Id"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Name"
+            }
+          },
+          {
+            "name": "X-Admin-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Key"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateApiKeyResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "List API keys for organization",
+        "description": "List API keys for the tenant (masked).",
+        "operationId": "list_api_keys_v1_admin_tenants__organization_id__api_keys_get",
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Organization Id"
+            }
+          },
+          {
+            "name": "X-Admin-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Key"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ApiKeyListItem"
+                  },
+                  "title": "Response List Api Keys V1 Admin Tenants  Organization Id  Api Keys Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/tenants/{organization_id}/api-keys/{key_id}": {
+      "delete": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Revoke API key",
+        "description": "Revoke an API key by ID.",
+        "operationId": "revoke_api_key_v1_admin_tenants__organization_id__api_keys__key_id__delete",
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Organization Id"
+            }
+          },
+          {
+            "name": "key_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Key Id"
+            }
+          },
+          {
+            "name": "X-Admin-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Key"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/tenants/{organization_id}/users": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "List users in organization",
+        "description": "List users for the tenant (requires User table from schema).",
+        "operationId": "list_users_v1_admin_tenants__organization_id__users_get",
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Organization Id"
+            }
+          },
+          {
+            "name": "X-Admin-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Key"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/tenants/{organization_id}/roles": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "List roles in organization",
+        "description": "List roles for the tenant.",
+        "operationId": "list_roles_v1_admin_tenants__organization_id__roles_get",
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Organization Id"
+            }
+          },
+          {
+            "name": "X-Admin-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Key"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/tenants/{organization_id}/users/{user_id}/roles": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Assign roles to user",
+        "description": "Assign one or more roles to a user. Replaces existing assignments if needed.",
+        "operationId": "assign_roles_to_user_v1_admin_tenants__organization_id__users__user_id__roles_post",
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Organization Id"
+            }
+          },
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "User Id"
+            }
+          },
+          {
+            "name": "X-Admin-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Key"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignRolesRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/tenants/{organization_id}/permissions": {
+      "get": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "List permissions (global or role\u2013permission mapping)",
+        "description": "List all permissions (global list). Optionally include which roles have which permissions.",
+        "operationId": "list_permissions_v1_admin_tenants__organization_id__permissions_get",
+        "parameters": [
+          {
+            "name": "organization_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Organization Id"
+            }
+          },
+          {
+            "name": "X-Admin-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Key"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessions": {
+      "post": {
+        "tags": [
+          "Sessions"
+        ],
+        "summary": "Create a session",
+        "description": "Create a new conversation session for the current tenant. Use the returned session_id in analysis and feedback.",
+        "operationId": "post_create_session_v1_sessions_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateSessionResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ]
+      }
+    },
+    "/v1/sessions/{session_id}/transcript": {
+      "post": {
+        "tags": [
+          "Sessions"
+        ],
+        "summary": "Add transcript for a session",
+        "description": "Store transcript text for a session. Session must belong to the caller's organization.",
+        "operationId": "post_transcript_v1_sessions__session_id__transcript_post",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TranscriptRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sessions/{session_id}/audio": {
+      "post": {
+        "tags": [
+          "Sessions"
+        ],
+        "summary": "Register audio metadata for a session",
+        "description": "Register audio metadata (storage path, duration, format) for a session. Blobs go in object storage; this stores the reference.",
+        "operationId": "post_audio_v1_sessions__session_id__audio_post",
+        "security": [
+          {
+            "APIKeyHeader": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Session Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AudioRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/training-runs": {
+      "get": {
+        "tags": [
+          "Training Runs"
+        ],
+        "summary": "List Training Runs",
+        "description": "List all training runs from GCS, newest first.",
+        "operationId": "list_training_runs_v1_admin_training_runs_get",
+        "parameters": [
+          {
+            "name": "X-Admin-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Key"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/training-runs/{run_id}": {
+      "get": {
+        "tags": [
+          "Training Runs"
+        ],
+        "summary": "Get Training Run",
+        "description": "Fetch training_metrics.json for a specific training run.",
+        "operationId": "get_training_run_v1_admin_training_runs__run_id__get",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Run Id"
+            }
+          },
+          {
+            "name": "X-Admin-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Key"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/admin/training-runs/latest/metrics": {
+      "get": {
+        "tags": [
+          "Training Runs"
+        ],
+        "summary": "Get Latest Metrics",
+        "description": "Fetch the latest training_metrics.json (models/training_metrics.json).",
+        "operationId": "get_latest_metrics_v1_admin_training_runs_latest_metrics_get",
+        "parameters": [
+          {
+            "name": "X-Admin-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Admin-Key"
+            }
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Authorization"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AnalysisRequest": {
+        "properties": {
+          "audio_base64": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Audio Base64",
+            "description": "Base64-encoded audio data"
+          },
+          "audio_url": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2083,
+                "minLength": 1,
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Audio Url",
+            "description": "URL to audio file"
+          },
+          "language": {
+            "type": "string",
+            "title": "Language",
+            "description": "Language code for ASR",
+            "default": "en"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Session Id",
+            "description": "Session ID for conversation tracking. Enables trajectory and history-aware predictions."
+          }
+        },
+        "type": "object",
+        "title": "AnalysisRequest",
+        "description": "Request body for analysis endpoints."
+      },
+      "AnalysisResponse": {
+        "properties": {
+          "prediction_id": {
+            "type": "string",
+            "title": "Prediction Id",
+            "description": "Unique prediction ID for linking feedback/outcomes"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Session Id",
+            "description": "Session ID for conversation tracking"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text",
+            "description": "Transcribed text"
+          },
+          "prosody": {
+            "$ref": "#/components/schemas/ProsodyFeatures",
+            "description": "Raw prosodic feature vector"
+          },
+          "signals": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "number"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Signals",
+            "description": "Interpreted prosodic signals: engagement, stress, certainty, rapport, empathy, tempo, intensity, expressiveness"
+          },
+          "duration": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Duration",
+            "description": "Audio duration in seconds",
+            "default": 0.0
+          },
+          "word_count": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Word Count",
+            "description": "Number of words",
+            "default": 0
+          },
+          "kpi_predictions": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/KPIPredictionResult"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Kpi Predictions",
+            "description": "Predicted outcomes for client-defined KPIs"
+          },
+          "alerts": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/KPIAlertResult"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Alerts",
+            "description": "Alerts from KPI predictions that crossed thresholds"
+          }
+        },
+        "type": "object",
+        "required": [
+          "prediction_id",
+          "text",
+          "prosody"
+        ],
+        "title": "AnalysisResponse",
+        "description": "Response from analysis endpoints.\n\nReturns prosodic features and KPI predictions.  No emotion labels.",
+        "example": {
+          "alerts": [
+            {
+              "direction": "BELOW",
+              "message": "Predicted customer_satisfaction (1.80) is below threshold (2.0)",
+              "threshold": 2.0
+            }
+          ],
+          "duration": 4.2,
+          "kpi_predictions": [
+            {
+              "alert": {
+                "direction": "BELOW",
+                "message": "Predicted customer_satisfaction (1.80) is below threshold (2.0)",
+                "threshold": 2.0
+              },
+              "confidence": 0.72,
+              "impact_factors": [
+                {
+                  "description": "Negative vocal tone is hurting this KPI",
+                  "impact": -0.6,
+                  "signal": "valence",
+                  "value": -0.72
+                }
+              ],
+              "kpi_id": "kpi_csat",
+              "kpi_name": "customer_satisfaction",
+              "kpi_type": "SCALAR",
+              "predicted_value": 1.8,
+              "recommended_actions": [
+                {
+                  "action": "Adopt a warmer, more supportive vocal tone",
+                  "expected_impact": 0.15,
+                  "signal_target": "valence"
+                }
+              ],
+              "trajectory": "declining"
+            }
+          ],
+          "prediction_id": "pred_abc123",
+          "prosody": {
+            "arousal": 0.85,
+            "dominance": 0.65,
+            "jitter": 0.03,
+            "prosody": {
+              "intensity": "loud",
+              "pitch_trend": "rising",
+              "tempo": "fast"
+            },
+            "speech_rate": 5.8,
+            "valence": -0.72
+          },
+          "session_id": "sess_xyz789",
+          "text": "I've been waiting for 30 minutes and nobody has helped me!",
+          "word_count": 11
+        }
+      },
+      "ApiKeyListItem": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "key_preview": {
+            "type": "string",
+            "title": "Key Preview",
+            "description": "Last 4 characters, e.g. \u2026abc1"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "key_preview"
+        ],
+        "title": "ApiKeyListItem"
+      },
+      "AssignRolesRequest": {
+        "properties": {
+          "role_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Role Ids",
+            "description": "Role IDs to assign to the user"
+          }
+        },
+        "type": "object",
+        "required": [
+          "role_ids"
+        ],
+        "title": "AssignRolesRequest"
+      },
+      "AudioRequest": {
+        "properties": {
+          "storage_path": {
+            "type": "string",
+            "title": "Storage Path",
+            "description": "Path or URL to stored audio (e.g. S3/GCS)"
+          },
+          "duration_seconds": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration Seconds",
+            "description": "Duration in seconds"
+          },
+          "format": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Format",
+            "description": "Audio format (e.g. wav, mp3)"
+          }
+        },
+        "type": "object",
+        "required": [
+          "storage_path"
+        ],
+        "title": "AudioRequest"
+      },
+      "Body_analyze_audio_file_v1_analyze_audio_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "title": "File",
+            "description": "Audio file (WAV, MP3, M4A, FLAC, OGG)"
+          },
+          "language": {
+            "type": "string",
+            "title": "Language",
+            "description": "Language code for ASR",
+            "default": "en"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Session Id",
+            "description": "Session ID for conversation tracking"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_analyze_audio_file_v1_analyze_audio_post"
+      },
+      "Body_analyze_gcs_audio_v1_analyze_gcs_post": {
+        "properties": {
+          "gcs_uri": {
+            "type": "string",
+            "title": "Gcs Uri",
+            "description": "GCS URI (gs://bucket/path/to/audio.wav)"
+          },
+          "language": {
+            "type": "string",
+            "title": "Language",
+            "description": "Language code for ASR",
+            "default": "en"
+          },
+          "session_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Session Id",
+            "description": "Session ID for conversation tracking"
+          }
+        },
+        "type": "object",
+        "required": [
+          "gcs_uri"
+        ],
+        "title": "Body_analyze_gcs_audio_v1_analyze_gcs_post"
+      },
+      "Body_extract_prosody_features_v1_features_prosody_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "format": "binary",
+            "title": "File",
+            "description": "Audio file"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_extract_prosody_features_v1_features_prosody_post"
+      },
+      "CreateApiKeyResponse": {
+        "properties": {
+          "id": {
+            "type": "string",
+            "title": "Id"
+          },
+          "key": {
+            "type": "string",
+            "title": "Key",
+            "description": "The raw API key; only returned once. Store it securely."
+          },
+          "name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "key"
+        ],
+        "title": "CreateApiKeyResponse"
+      },
+      "CreateSessionResponse": {
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "title": "Session Id",
+            "description": "ID of the created session"
+          }
+        },
+        "type": "object",
+        "required": [
+          "session_id"
+        ],
+        "title": "CreateSessionResponse"
+      },
+      "FeedbackCorrectionRequest": {
+        "properties": {
+          "prediction_id": {
+            "type": "string",
+            "title": "Prediction Id",
+            "description": "ID of the prediction to correct"
+          },
+          "corrected_valence": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "minimum": -1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Corrected Valence",
+            "description": "Corrected valence"
+          },
+          "corrected_arousal": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Corrected Arousal",
+            "description": "Corrected arousal"
+          },
+          "corrected_dominance": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 1.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Corrected Dominance",
+            "description": "Corrected dominance"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes",
+            "description": "Optional reviewer notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "prediction_id"
+        ],
+        "title": "FeedbackCorrectionRequest",
+        "description": "Human correction of a prediction."
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "KPIAlertResult": {
+        "properties": {
+          "threshold": {
+            "type": "number",
+            "title": "Threshold",
+            "description": "Configured threshold"
+          },
+          "direction": {
+            "type": "string",
+            "title": "Direction",
+            "description": "Alert direction: above or below"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message",
+            "description": "Human-readable alert message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "threshold",
+          "direction",
+          "message"
+        ],
+        "title": "KPIAlertResult",
+        "description": "Alert fired when a predicted KPI crosses its threshold."
+      },
+      "KPIImpactFactor": {
+        "properties": {
+          "signal": {
+            "type": "string",
+            "title": "Signal",
+            "description": "Prosodic signal name (e.g., valence, speech_rate)"
+          },
+          "value": {
+            "type": "number",
+            "title": "Value",
+            "description": "Current signal value"
+          },
+          "impact": {
+            "type": "number",
+            "title": "Impact",
+            "description": "Impact on KPI (signed)"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description",
+            "description": "Human-readable explanation"
+          }
+        },
+        "type": "object",
+        "required": [
+          "signal",
+          "value",
+          "impact",
+          "description"
+        ],
+        "title": "KPIImpactFactor",
+        "description": "A prosodic signal driving a KPI prediction."
+      },
+      "KPIOutcomeEntry": {
+        "properties": {
+          "kpi_id": {
+            "type": "string",
+            "title": "Kpi Id",
+            "description": "KPI identifier (from the dashboard)"
+          },
+          "scalar_value": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scalar Value",
+            "description": "Actual scalar value (for SCALAR KPIs)"
+          },
+          "boolean_value": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Boolean Value",
+            "description": "Actual boolean value (for BINARY KPIs)"
+          },
+          "category_value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Category Value",
+            "description": "Actual category (for CATEGORICAL KPIs)"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kpi_id"
+        ],
+        "title": "KPIOutcomeEntry",
+        "description": "Actual outcome value for a single KPI."
+      },
+      "KPIPredictionResult": {
+        "properties": {
+          "kpi_id": {
+            "type": "string",
+            "title": "Kpi Id",
+            "description": "KPI identifier"
+          },
+          "kpi_name": {
+            "type": "string",
+            "title": "Kpi Name",
+            "description": "KPI display name"
+          },
+          "kpi_type": {
+            "type": "string",
+            "title": "Kpi Type",
+            "description": "KPI type: SCALAR, BINARY, CATEGORICAL"
+          },
+          "predicted_value": {
+            "title": "Predicted Value",
+            "description": "Predicted outcome value"
+          },
+          "confidence": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Confidence",
+            "description": "Prediction confidence"
+          },
+          "trajectory": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trajectory",
+            "description": "Trend: improving, stable, declining"
+          },
+          "impact_factors": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/KPIImpactFactor"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Impact Factors",
+            "description": "Signals driving this prediction"
+          },
+          "recommended_actions": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/KPIRecommendedAction"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Recommended Actions",
+            "description": "Actions to improve this KPI"
+          },
+          "alert": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/KPIAlertResult"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Alert if threshold crossed"
+          }
+        },
+        "type": "object",
+        "required": [
+          "kpi_id",
+          "kpi_name",
+          "kpi_type",
+          "predicted_value",
+          "confidence"
+        ],
+        "title": "KPIPredictionResult",
+        "description": "Prediction for a single client-defined KPI."
+      },
+      "KPIRecommendedAction": {
+        "properties": {
+          "action": {
+            "type": "string",
+            "title": "Action",
+            "description": "What to do"
+          },
+          "expected_impact": {
+            "type": "number",
+            "title": "Expected Impact",
+            "description": "Estimated improvement"
+          },
+          "signal_target": {
+            "type": "string",
+            "title": "Signal Target",
+            "description": "Which prosodic signal this targets"
+          }
+        },
+        "type": "object",
+        "required": [
+          "action",
+          "expected_impact",
+          "signal_target"
+        ],
+        "title": "KPIRecommendedAction",
+        "description": "Actionable recommendation to improve a KPI."
+      },
+      "PhoneticFeaturesResponse": {
+        "properties": {
+          "phonemes": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Phonemes",
+            "description": "List of phonemes"
+          },
+          "vowel_ratio": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Vowel Ratio",
+            "description": "Ratio of vowels"
+          },
+          "consonant_ratio": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Consonant Ratio",
+            "description": "Ratio of consonants"
+          },
+          "stressed_syllable_count": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Stressed Syllable Count",
+            "description": "Number of stressed syllables"
+          },
+          "phoneme_count": {
+            "type": "integer",
+            "minimum": 0.0,
+            "title": "Phoneme Count",
+            "description": "Total phoneme count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "phonemes",
+          "vowel_ratio",
+          "consonant_ratio",
+          "stressed_syllable_count",
+          "phoneme_count"
+        ],
+        "title": "PhoneticFeaturesResponse",
+        "description": "Response from phonetic feature extraction."
+      },
+      "ProsodyFeatures": {
+        "properties": {
+          "valence": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": -1.0,
+            "title": "Valence",
+            "description": "Vocal tone: -1 (negative) to +1 (positive)"
+          },
+          "arousal": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Arousal",
+            "description": "Activation: 0 (calm) to 1 (activated)"
+          },
+          "dominance": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Dominance",
+            "description": "Assertiveness: 0 (submissive) to 1 (dominant)"
+          },
+          "prosody": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProsodyMarkers"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Categorical prosodic markers"
+          },
+          "pitch_mean": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pitch Mean",
+            "description": "Mean fundamental frequency (Hz)"
+          },
+          "pitch_std": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pitch Std",
+            "description": "F0 standard deviation"
+          },
+          "pitch_range": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pitch Range",
+            "description": "F0 range (Hz)"
+          },
+          "energy_mean": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Energy Mean",
+            "description": "Mean RMS energy"
+          },
+          "energy_std": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Energy Std",
+            "description": "Energy standard deviation"
+          },
+          "speech_rate": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Speech Rate",
+            "description": "Speech rate (syllables/sec)"
+          },
+          "jitter": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Jitter",
+            "description": "Pitch perturbation"
+          },
+          "shimmer": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Shimmer",
+            "description": "Amplitude perturbation"
+          },
+          "hnr": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hnr",
+            "description": "Harmonics-to-Noise Ratio (dB)"
+          },
+          "spectral_centroid": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spectral Centroid",
+            "description": "Spectral centroid (Hz)"
+          },
+          "spectral_rolloff": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Spectral Rolloff",
+            "description": "Spectral rolloff (Hz)"
+          }
+        },
+        "type": "object",
+        "required": [
+          "valence",
+          "arousal",
+          "dominance"
+        ],
+        "title": "ProsodyFeatures",
+        "description": "Raw prosodic feature vector \u2014 the universal signal."
+      },
+      "ProsodyFeaturesResponse": {
+        "properties": {
+          "f0_mean": {
+            "type": "number",
+            "title": "F0 Mean",
+            "description": "Mean fundamental frequency (Hz)"
+          },
+          "f0_std": {
+            "type": "number",
+            "title": "F0 Std",
+            "description": "F0 standard deviation"
+          },
+          "f0_min": {
+            "type": "number",
+            "title": "F0 Min",
+            "description": "Minimum F0"
+          },
+          "f0_max": {
+            "type": "number",
+            "title": "F0 Max",
+            "description": "Maximum F0"
+          },
+          "f0_range": {
+            "type": "number",
+            "title": "F0 Range",
+            "description": "F0 range (max - min)"
+          },
+          "energy_mean": {
+            "type": "number",
+            "title": "Energy Mean",
+            "description": "Mean RMS energy"
+          },
+          "energy_std": {
+            "type": "number",
+            "title": "Energy Std",
+            "description": "Energy standard deviation"
+          },
+          "jitter": {
+            "type": "number",
+            "title": "Jitter",
+            "description": "Pitch perturbation (jitter)"
+          },
+          "shimmer": {
+            "type": "number",
+            "title": "Shimmer",
+            "description": "Amplitude perturbation (shimmer)"
+          },
+          "hnr": {
+            "type": "number",
+            "title": "Hnr",
+            "description": "Harmonics-to-Noise Ratio (dB)"
+          },
+          "speech_rate": {
+            "type": "number",
+            "title": "Speech Rate",
+            "description": "Speech rate (syllables/second)"
+          },
+          "pause_rate": {
+            "type": "number",
+            "title": "Pause Rate",
+            "description": "Pause rate (pauses/second)"
+          },
+          "pause_duration_mean": {
+            "type": "number",
+            "title": "Pause Duration Mean",
+            "description": "Mean pause duration (seconds)"
+          },
+          "spectral_centroid_mean": {
+            "type": "number",
+            "title": "Spectral Centroid Mean",
+            "description": "Mean spectral centroid (Hz)"
+          },
+          "spectral_rolloff_mean": {
+            "type": "number",
+            "title": "Spectral Rolloff Mean",
+            "description": "Mean spectral rolloff (Hz)"
+          },
+          "mfcc_means": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Mfcc Means",
+            "description": "Mean MFCC coefficients"
+          }
+        },
+        "type": "object",
+        "required": [
+          "f0_mean",
+          "f0_std",
+          "f0_min",
+          "f0_max",
+          "f0_range",
+          "energy_mean",
+          "energy_std",
+          "jitter",
+          "shimmer",
+          "hnr",
+          "speech_rate",
+          "pause_rate",
+          "pause_duration_mean",
+          "spectral_centroid_mean",
+          "spectral_rolloff_mean",
+          "mfcc_means"
+        ],
+        "title": "ProsodyFeaturesResponse",
+        "description": "Response from prosody feature extraction endpoint."
+      },
+      "ProsodyMarkers": {
+        "properties": {
+          "pitch_trend": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pitch Trend",
+            "description": "Pitch trend: rising, falling, flat, varied"
+          },
+          "intensity": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Intensity",
+            "description": "Intensity: soft, normal, loud, emphasized"
+          },
+          "tempo": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tempo",
+            "description": "Tempo: slow, normal, fast"
+          }
+        },
+        "type": "object",
+        "title": "ProsodyMarkers",
+        "description": "High-level prosodic markers for a segment."
+      },
+      "SessionOutcomeRequest": {
+        "properties": {
+          "session_id": {
+            "type": "string",
+            "title": "Session Id",
+            "description": "Session ID of the conversation"
+          },
+          "outcomes": {
+            "items": {
+              "$ref": "#/components/schemas/KPIOutcomeEntry"
+            },
+            "type": "array",
+            "minItems": 1,
+            "title": "Outcomes",
+            "description": "Actual KPI outcome values"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes",
+            "description": "Optional notes about the outcome"
+          }
+        },
+        "type": "object",
+        "required": [
+          "session_id",
+          "outcomes"
+        ],
+        "title": "SessionOutcomeRequest",
+        "description": "Report actual KPI outcomes after a conversation ends.\n\nThis is the ground truth that closes the training feedback loop.\nThe system learns which prosodic patterns predict which KPI\noutcomes for each client."
+      },
+      "TextInput": {
+        "properties": {
+          "text": {
+            "type": "string",
+            "title": "Text",
+            "description": "Text to extract phonetic features from"
+          },
+          "language": {
+            "type": "string",
+            "title": "Language",
+            "description": "Language code",
+            "default": "en-us"
+          }
+        },
+        "type": "object",
+        "required": [
+          "text"
+        ],
+        "title": "TextInput",
+        "description": "Input for phonetic feature extraction."
+      },
+      "TranscriptRequest": {
+        "properties": {
+          "content": {
+            "type": "string",
+            "title": "Content",
+            "description": "Transcript text"
+          },
+          "language": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Language",
+            "description": "Language code (e.g. en)"
+          }
+        },
+        "type": "object",
+        "required": [
+          "content"
+        ],
+        "title": "TranscriptRequest"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "APIKeyHeader": {
+        "type": "apiKey",
+        "description": "API key for authentication",
+        "in": "header",
+        "name": "X-API-Key"
+      }
+    }
+  }
+}

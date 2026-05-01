@@ -1,0 +1,62 @@
+{
+  "name": "@prosodyai/mcp-docs",
+  "version": "0.1.0",
+  "description": "MCP server exposing ProsodyAI docs, SDK references, OpenAPI, and implementation recipes. Built for use by AI coding agents (e.g. AureliaStudio) implementing ProsodyAI integrations.",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ProsodyAI/mcp-docs.git"
+  },
+  "homepage": "https://github.com/ProsodyAI/mcp-docs#readme",
+  "bugs": {
+    "url": "https://github.com/ProsodyAI/mcp-docs/issues"
+  },
+  "keywords": [
+    "prosodyai",
+    "mcp",
+    "model-context-protocol",
+    "docs",
+    "ai-agent",
+    "voice",
+    "prosody"
+  ],
+  "main": "dist/stdio.js",
+  "bin": {
+    "prosodyai-mcp-docs": "dist/stdio.js"
+  },
+  "files": [
+    "dist/",
+    "content/",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json && chmod +x dist/stdio.js",
+    "build:content": "tsx scripts/sync-content.ts",
+    "prebuild": "npm run build:content",
+    "dev:stdio": "tsx src/stdio.ts",
+    "dev:http": "tsx src/http.ts",
+    "start:stdio": "node dist/stdio.js",
+    "start:http": "node dist/http.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --ext .ts",
+    "test": "node --test --import tsx test/**/*.test.ts",
+    "smoke": "tsx scripts/smoke-test.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "express": "^4.21.2",
+    "fuse.js": "^7.0.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.10.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=18.17"
+  }
+}

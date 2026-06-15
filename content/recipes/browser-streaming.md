@@ -65,7 +65,7 @@ otherwise the last 1-2 seconds of the conversation won't be analyzed.
 ## 5. Submit the outcome
 
 When the call wraps (CSAT survey returns, agent marks resolved, etc.), POST
-to `/v1/feedback/session-outcome` with the same `sessionId`.
+to `/v1/feedback/session_outcome` with the same `sessionId`.
 
 ## Edge cases
 

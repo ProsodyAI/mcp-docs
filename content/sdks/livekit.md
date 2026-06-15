@@ -1,36 +1,24 @@
-## Transcript-level anger/confusion analysis
+## LiveKit realtime prosody analysis
 
-The plugin can classify transcript turns alongside prosody events. Feed it text
-from your LiveKit STT/transcription pipeline:
+The plugin streams a LiveKit `AudioTrack` to the hosted ProsodyAI realtime
+endpoint and yields `ProsodyEvent` directives:
 
 ```python
 from livekit_plugins_prosodyai import ProsodyAnalyzer
 
-analyzer = ProsodyAnalyzer(model_path="/path/to/prosody/checkpoint")
-
-analysis = analyzer.analyze_transcript(
-    "wait, I don't understand why this is still broken",
-    speaker_id="caller",
+analyzer = ProsodyAnalyzer(
+    api_key="psk_...",
+    session_id="call-123",
+    vertical="contact_center",
 )
 
-print(analysis.label)           # "angry_confused"
-print(analysis.anger)           # 0.0 - 1.0
-print(analysis.confusion)       # 0.0 - 1.0
-print(analysis.escalation_risk) # 0.0 - 1.0
-print(analysis.evidence)        # cue explanations
+async for event in analyzer.analyze_track(audio_track):
+    print(event.session_id, event.emotion, event.valence, event.arousal)
+    if event.steering:
+        print(event.steering.system_prompt)
+    if event.modulation_mode == "caller_escalating":
+        print(event.tts_speed, event.tts_emotion)
 ```
 
-If you already have a `ProsodyEvent` for the same turn, attach the transcript
-analysis directly:
-
-```python
-event = analyzer.attach_transcript(event, transcript_text, speaker_id="caller")
-if event.transcript_analysis.label in {"angry", "confused", "angry_confused"}:
-    # Escalate, slow down, ask a clarifying question, or route to a human.
-    ...
-```
-
-This classifier is deterministic and fast. It is meant to complement the
-prosody model: prosody catches tone, while transcript analysis catches semantic
-signals like clarification requests, repeated confusion, explicit frustration,
-profanity, refund/cancel intent, and escalation language.
+Set `on_warning` to catch server-side diagnostics such as `audio_silent`, which
+means the client is sending buffers but they contain only zeros.

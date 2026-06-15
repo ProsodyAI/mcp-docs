@@ -24,6 +24,7 @@ and rate-limited dispatch to the ProsodyAI streaming endpoint.
 
 ```python
 import os
+import uuid
 from livekit.agents import Agent, AgentSession, AutoSubscribe, JobContext
 from livekit_plugins_prosodyai import ProsodyAnalyzer
 
@@ -37,6 +38,7 @@ class SupportAgent(Agent):
         )
         self.prosody = ProsodyAnalyzer(
             api_key=os.environ["PROSODYAI_API_KEY"],
+            session_id=f"call-{uuid.uuid4()}",
             vertical="contact_center",
             chunk_duration=3.0,
         )
@@ -45,15 +47,19 @@ class SupportAgent(Agent):
         # session.input.audio_track is the caller's mic stream
         track = self.session.input.audio_track
         async for event in self.prosody.analyze_track(track):
-            if event.escalation_alert:
+            if event.steering:
+                self.session.context.update(
+                    prosody_steering=event.steering.system_prompt,
+                )
+            if event.modulation_mode == "caller_escalating":
                 await self.session.say(
                     "I can hear how frustrating this is. Let me jump straight to a fix.",
                     interrupt=True,
                 )
                 # Optionally: trigger a transfer, log a CRM event, etc.
-            elif event.forward_predictions and event.forward_predictions.churn_risk > 0.6:
-                # Steer the LLM toward retention talking points.
-                self.session.context.update(persona="retention_specialist")
+            elif event.kpi_predictions:
+                # Tenant-defined KPI predictions, when configured.
+                self.session.context.update(kpi_predictions=event.kpi_predictions)
 
 async def entrypoint(ctx: JobContext):
     await ctx.connect(auto_subscribe=AutoSubscribe.AUDIO_ONLY)

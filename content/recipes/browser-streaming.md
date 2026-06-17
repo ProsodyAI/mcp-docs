@@ -4,7 +4,7 @@ Goal: capture mic audio in the browser, stream it to the ProsodyAI realtime
 endpoint, and react to escalation alerts in the UI (e.g. show a "calm down"
 indicator, switch the agent's persona, or surface a coach card).
 
-This is the pattern AureliaStudio uses inside the dashboard for live coaching.
+This is the pattern many voice dashboards use for live coaching.
 
 ## 1. Install
 

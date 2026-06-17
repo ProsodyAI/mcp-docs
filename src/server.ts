@@ -40,7 +40,7 @@ export async function createServer(): Promise<McpServer> {
       instructions: [
         "ProsodyAI documentation, SDK references, REST API reference, and curated implementation recipes.",
         "",
-        "Use this server when implementing a ProsodyAI integration (e.g. inside AureliaStudio or any voice/agent app).",
+        "Use this server when implementing a ProsodyAI integration in any voice or agent app.",
         "",
         "Workflow:",
         "1. Start with `get_overview` for context on what ProsodyAI does and how the pieces fit together.",

@@ -290,7 +290,7 @@ Default: `gs://prosodyai-org-data/{org-slug}/`
 
 ```
 prosodyai-org-data/
-  aurelia-studio/
+  {org-slug}/
     audio/{session-id}.wav
     transcripts/{session-id}.json
 ```

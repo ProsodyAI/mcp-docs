@@ -1,6 +1,6 @@
 # Quickstart: TypeScript SDK
 
-Use this when adding ProsodyAI to a Node, Next.js, or browser app (e.g. AureliaStudio's web client or a Vercel function).
+Use this when adding ProsodyAI to a Node, Next.js, or browser app (e.g. a web client or Vercel function).
 
 ## 1. Install
 

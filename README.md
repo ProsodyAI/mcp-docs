@@ -3,7 +3,7 @@
 MCP server that exposes ProsodyAI documentation, SDK references, REST API
 reference (OpenAPI), and curated implementation recipes to AI coding agents.
 
-Built so that an external coding agent (e.g. **AureliaStudio**) can implement
+Built so that an external coding agent can implement
 ProsodyAI integrations correctly the first time, without scraping the
 website or guessing API shapes.
 
@@ -51,7 +51,7 @@ locates the monorepo via `PROSODYAI_REPO_ROOT` or by walking up from this
 package's directory (works when mounted as `packages/mcp-docs` in the
 parent monorepo).
 
-## Use it from AureliaStudio (or any MCP client)
+## Use it from any MCP client
 
 ### Stdio (local)
 

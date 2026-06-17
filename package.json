@@ -1,7 +1,7 @@
 {
   "name": "@prosodyai/mcp-docs",
   "version": "0.1.0",
-  "description": "MCP server exposing ProsodyAI docs, SDK references, OpenAPI, and implementation recipes. Built for use by AI coding agents (e.g. AureliaStudio) implementing ProsodyAI integrations.",
+  "description": "MCP server exposing ProsodyAI docs, SDK references, OpenAPI, and implementation recipes. Built for use by AI coding agents implementing ProsodyAI integrations.",
   "type": "module",
   "license": "MIT",
   "repository": {

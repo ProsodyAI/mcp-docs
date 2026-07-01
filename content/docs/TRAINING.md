@@ -68,7 +68,7 @@ ProsodySSM saves PyTorch checkpoints (e.g. `best_model_v2.pt`), not HuggingFace 
 | `deploy/config.py` | Truss TrainingProject + TrainingJob: image, compute (e.g. H100), runtime (run.sh), checkpointing, cache, `gcp_credentials` secret |
 | `deploy/run.sh` | Install torch, causal-conv1d, mamba-ssm, deps; set `GOOGLE_APPLICATION_CREDENTIALS` from secret; run `scripts/training/train.py` |
 | `scripts/training/train.py` | Entrypoint: download data from GCS, `run_training()`, optional eval |
-| `scripts/training/data.py` | Download manifests and audio from GCS (CREMA-D, RAVDESS, TESS, MSP-Podcast, etc.); real VAD from MSP-Podcast when available |
+| `scripts/training/data.py` | Load manifests and audio from GCS (CREMA-D, RAVDESS, TESS, MELD, CMU-MOSEI); derived VAD from MOSEI |
 | `scripts/training/loop.py` | Training loop (emotion, VAD, speaker adversarial); checkpointing; optional GCS upload |
 | `.truss_ignore` / workspace exclude | Excludes .git, website, api, docs, data, checkpoints, etc. from upload |
 

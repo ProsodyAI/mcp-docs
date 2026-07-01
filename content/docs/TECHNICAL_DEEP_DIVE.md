@@ -241,7 +241,8 @@ Where \(\theta \in \mathbb{R}^{L+1}\) is learnable (25 layers: embedding + 24 tr
 | RAVDESS | ~1,440 | GCS `datasets/audio/ravdess` | calm→neutral, happy, sad, angry, fearful, disgusted, surprised |
 | TESS | ~2,800 | GCS `datasets/tess` or Kaggle | angry, disgusted, fearful, happy, neutral, sad, surprised |
 | Orpheus | variable | Optional volume mount | Various |
-| MSP-Podcast | variable | GCS `datasets/msp-podcast` | Conversational, with VAD labels |
+| MELD | variable | GCS `datasets/meld` | Dialogue emotion |
+| CMU-MOSEI | variable | GCS `datasets/cmu-mosei` | Sentiment + emotions; derived VAD targets |
 
 **Total**: ~13,000 samples. **Split**: speaker-disjoint — ~10% of unique actors held out for validation.
 
